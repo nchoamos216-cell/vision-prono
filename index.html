@@ -59,6 +59,11 @@
       color: #666;
       font-size: 0.9em;
     }
+
+    #historique h3 {
+      color: #1a73e8;
+      margin-top: 20px;
+    }
   </style>
 </head>
 <body>
@@ -84,17 +89,24 @@
     fetch("pronostics.json")
       .then(response => response.json())
       .then(data => {
+        // Date du jour formatée comme dans le JSON
         const today = new Date().toLocaleDateString("fr-FR", {
           day: "numeric",
           month: "long",
           year: "numeric"
-        });
+        }).toLowerCase();
 
         const todayContainer = document.getElementById("liste-pronos");
         const historiqueContainer = document.getElementById("historique");
 
-        // Chercher les pronos du jour
-        const pronoJour = data.jours.find(j => j.date === today);
+        let pronoJour = null;
+
+        // Recherche du jour correspondant
+        data.jours.forEach(j => {
+          if (j.date.toLowerCase() === today) {
+            pronoJour = j;
+          }
+        });
 
         if (pronoJour) {
           document.getElementById("date").textContent = `🗓️ ${pronoJour.date}`;
@@ -110,25 +122,29 @@
             todayContainer.appendChild(div);
           });
         } else {
-          todayContainer.innerHTML = "<p>Aucun pronostic pour aujourd'hui.</p>";
+          document.getElementById("date").textContent = "🗓️ Aucun pronostic pour aujourd'hui";
+          todayContainer.innerHTML = "<p style='color:gray;'>Aucun pronostic disponible pour cette date.</p>";
         }
 
-        // Historique (tous les jours avant aujourd’hui)
-        const anciens = data.jours.filter(j => j.date !== today);
-        anciens.forEach(jour => {
-          const section = document.createElement("div");
-          section.innerHTML = `<h3>${jour.date}</h3>`;
-          jour.matchs.forEach(p => {
-            const pdiv = document.createElement("p");
-            pdiv.textContent = `${p.match} — ${p.pronostic} ${p.resultat || "🕒 En attente"}`;
-            section.appendChild(pdiv);
+        // Affichage historique (du plus récent au plus ancien)
+        data.jours
+          .filter(j => j.date.toLowerCase() !== today)
+          .forEach(jour => {
+            const section = document.createElement("div");
+            section.innerHTML = `<h3>${jour.date}</h3>`;
+            jour.matchs.forEach(p => {
+              const pdiv = document.createElement("p");
+              pdiv.textContent = `${p.match} — ${p.pronostic} ${p.resultat || "🕒 En attente"}`;
+              section.appendChild(pdiv);
+            });
+            historiqueContainer.appendChild(section);
           });
-          historiqueContainer.appendChild(section);
-        });
       })
       .catch(error => {
         console.error("Erreur chargement JSON :", error);
+        document.getElementById("liste-pronos").innerHTML = "<p style='color:red;'>Erreur lors du chargement des données.</p>";
       });
   </script>
 </body>
 </html>
+
