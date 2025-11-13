@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://nchoamos216-cell.github.io/vision-prono/sitemap.xml
