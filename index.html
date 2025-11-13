@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VISION PRONO</title>
+
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -23,6 +24,7 @@
       margin: auto;
       background-color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 10px;
     }
     h2 {
       color: #333;
@@ -71,6 +73,10 @@
     button:hover {
       background-color: #0f5ed7;
     }
+    .separator {
+      margin: 30px 0;
+      border-top: 3px solid #1a73e8;
+    }
   </style>
 </head>
 <body>
@@ -86,6 +92,8 @@
     <h2>Pronostics du jour</h2>
     <div id="liste-pronos"></div>
 
+    <div class="separator"></div>
+
     <h2>Historique</h2>
     <div id="historique"></div>
   </main>
@@ -96,13 +104,14 @@
 
   <script>
     function chargerPronostics() {
-      fetch("pronostics.json?_=" + new Date().getTime()) // évite le cache
+      fetch("pronostics.json?_=" + new Date().getTime()) // éviter le cache
         .then(response => response.json())
         .then(data => {
+          // Nettoyage avant affichage
           document.getElementById("liste-pronos").innerHTML = "";
           document.getElementById("historique").innerHTML = "";
 
-          // Section du jour
+          // 🎯 Section du jour (en haut)
           document.getElementById("date").textContent = `🗓️ ${data.aujourdhui.date}`;
           data.aujourdhui.matchs.forEach(p => {
             const div = document.createElement("div");
@@ -115,8 +124,12 @@
             document.getElementById("liste-pronos").appendChild(div);
           });
 
-          // Historique
-          data.historique.forEach(jour => {
+          // 📅 Historique (en bas, du plus ancien au plus récent)
+          const historiqueTrie = [...data.historique].sort(
+            (a, b) => new Date(a.date) - new Date(b.date)
+          );
+
+          historiqueTrie.forEach(jour => {
             const jourDiv = document.createElement("div");
             jourDiv.innerHTML = `<h4>${jour.date}</h4>`;
             jour.matchs.forEach(p => {
@@ -127,7 +140,7 @@
               else if (p.resultat.includes("Perdu")) resClass = "perdu";
 
               div.innerHTML = `
-                <p><strong>${p.match}</strong> — ${p.pronostic} 
+                <p><strong>${p.match}</strong> — ${p.pronostic}
                 ${p.confiance ? `(${p.confiance})` : ""}
                 <span class="resultat ${resClass}"> ${p.resultat}</span></p>
               `;
