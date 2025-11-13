@@ -4,9 +4,8 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VISION PRONO</title>
-  
+
   <style>
-    /* ===== STYLE GLOBAL ===== */
     body {
       font-family: Arial, sans-serif;
       background-color: #f4f6f9;
@@ -27,6 +26,7 @@
       margin: auto;
       background-color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      border-radius: 10px;
     }
 
     h2 {
@@ -61,6 +61,34 @@
       color: #666;
       font-size: 0.9em;
     }
+
+    #refresh {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: 0.3s;
+      margin-bottom: 15px;
+    }
+
+    #refresh:hover {
+      background-color: #155bb5;
+    }
+
+    #historique {
+      margin-top: 30px;
+    }
+
+    .historique-item {
+      background: #eef3fc;
+      border: 1px solid #cbd6ee;
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
   </style>
 </head>
 <body>
@@ -71,10 +99,14 @@
 
   <main>
     <div class="date" id="date"></div>
-    <h2>Pronostics du jour</h2>
+    <button id="refresh">🔄 Actualiser les pronostics</button>
 
-    <div id="liste-pronos">
-      <!-- Les pronostics du jour vont s’afficher ici -->
+    <h2>Pronostics du jour</h2>
+    <div id="liste-pronos"></div>
+
+    <div id="historique">
+      <h2>Historique</h2>
+      <div id="liste-historique"></div>
     </div>
   </main>
 
@@ -83,41 +115,66 @@
   </footer>
 
   <script>
-    // ====== SCRIPT PRONOS DU JOUR ======
+    const listePronos = document.getElementById("liste-pronos");
+    const dateEl = document.getElementById("date");
+    const listeHistorique = document.getElementById("liste-historique");
 
-    const pronostics = [
-      {
-        match: "France vs Ukraine",
-        pronostic: "Victoire de la France et Total +1,5",
-        confiance: "⭐⭐⭐⭐☆"
-      },
-      {
-        match: "Angleterre vs Serbie",
-        pronostic: "12 à la mi-temps",
-        confiance: "⭐⭐⭐☆☆"
-      }
-    ];
+    // Fonction principale pour charger les pronostics
+    function chargerPronostics() {
+      fetch("pronostics.json")
+        .then(response => response.json())
+        .then(data => {
+          // Sauvegarder dans l'historique local
+          const historique = JSON.parse(localStorage.getItem("historique")) || [];
+          historique.push({ date: data.date, matchs: data.matchs });
+          localStorage.setItem("historique", JSON.stringify(historique.slice(-5))); // garde les 5 derniers
 
-    const container = document.getElementById('liste-pronos');
-    pronostics.forEach(p => {
-      const div = document.createElement('div');
-      div.classList.add('pronostic');
-      div.innerHTML = `
-        <h3>${p.match}</h3>
-        <p><strong>Pronostic :</strong> ${p.pronostic}</p>
-        <p><strong>Confiance :</strong> ${p.confiance}</p>
-      `;
-      container.appendChild(div);
+          // Afficher la date
+          dateEl.textContent = `🗓️ ${data.date}`;
+
+          // Afficher les pronostics du jour
+          listePronos.innerHTML = "";
+          data.matchs.forEach(p => {
+            const div = document.createElement("div");
+            div.classList.add("pronostic");
+            div.innerHTML = `
+              <h3>${p.match}</h3>
+              <p><strong>Pronostic :</strong> ${p.pronostic}</p>
+              <p><strong>Confiance :</strong> ${p.confiance}</p>
+            `;
+            listePronos.appendChild(div);
+          });
+
+          afficherHistorique();
+        })
+        .catch(err => {
+          listePronos.innerHTML = "<p style='color:red;'>⚠️ Erreur lors du chargement des pronostics.</p>";
+          console.error(err);
+        });
+    }
+
+    // Afficher l’historique depuis localStorage
+    function afficherHistorique() {
+      const historique = JSON.parse(localStorage.getItem("historique")) || [];
+      listeHistorique.innerHTML = "";
+
+      historique.reverse().forEach(item => {
+        const bloc = document.createElement("div");
+        bloc.classList.add("historique-item");
+        bloc.innerHTML = `<strong>${item.date}</strong><ul>${item.matchs
+          .map(m => `<li>${m.match} — ${m.pronostic} (${m.confiance})</li>`)
+          .join("")}</ul>`;
+        listeHistorique.appendChild(bloc);
+      });
+    }
+
+    // Rafraîchissement manuel
+    document.getElementById("refresh").addEventListener("click", () => {
+      chargerPronostics();
     });
 
-    // Affiche automatiquement la date du jour
-    const today = new Date().toLocaleDateString('fr-FR', {
-      weekday: 'long',
-      day: 'numeric',
-      month: 'long',
-      year: 'numeric'
-    });
-    document.getElementById('date').textContent = `🗓️ ${today}`;
+    // Chargement initial
+    chargerPronostics();
   </script>
 </body>
 </html>
