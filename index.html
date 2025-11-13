@@ -119,20 +119,15 @@
     const dateEl = document.getElementById("date");
     const listeHistorique = document.getElementById("liste-historique");
 
-    // Fonction principale pour charger les pronostics
     function chargerPronostics() {
       fetch("pronostics.json")
         .then(response => response.json())
         .then(data => {
-          // Sauvegarder dans l'historique local
           const historique = JSON.parse(localStorage.getItem("historique")) || [];
           historique.push({ date: data.date, matchs: data.matchs });
-          localStorage.setItem("historique", JSON.stringify(historique.slice(-5))); // garde les 5 derniers
+          localStorage.setItem("historique", JSON.stringify(historique.slice(-5)));
 
-          // Afficher la date
           dateEl.textContent = `🗓️ ${data.date}`;
-
-          // Afficher les pronostics du jour
           listePronos.innerHTML = "";
           data.matchs.forEach(p => {
             const div = document.createElement("div");
@@ -144,7 +139,6 @@
             `;
             listePronos.appendChild(div);
           });
-
           afficherHistorique();
         })
         .catch(err => {
@@ -153,11 +147,9 @@
         });
     }
 
-    // Afficher l’historique depuis localStorage
     function afficherHistorique() {
       const historique = JSON.parse(localStorage.getItem("historique")) || [];
       listeHistorique.innerHTML = "";
-
       historique.reverse().forEach(item => {
         const bloc = document.createElement("div");
         bloc.classList.add("historique-item");
@@ -168,13 +160,12 @@
       });
     }
 
-    // Rafraîchissement manuel
     document.getElementById("refresh").addEventListener("click", () => {
       chargerPronostics();
     });
 
-    // Chargement initial
     chargerPronostics();
   </script>
 </body>
 </html>
+
