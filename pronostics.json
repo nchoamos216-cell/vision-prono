@@ -1,22 +1,33 @@
 {
-  "aujourdhui": {
-    "date": "13 novembre 2025",
-    "matchs": [
-      {
-        "match": "France vs Ukraine",
-        "pronostic": "Victoire de la France et Total +1,5",
-        "confiance": "⭐⭐⭐⭐☆",
-        "resultat": "🕒 En attente"
-      },
-      {
-        "match": "Angleterre vs Serbie",
-        "pronostic": "12 à la mi-temps",
-        "confiance": "⭐⭐⭐☆☆",
-        "resultat": "🕒 En attente"
-      }
-    ]
-  },
-  "historique": [
+  "jours": [
+    {
+      "date": "14 novembre 2025",
+      "matchs": [
+        {
+          "match": "",
+          "pronostic": "",
+          "confiance": "⭐⭐⭐⭐☆",
+          "resultat": "🕒 En attente"
+        }
+      ]
+    },
+    {
+      "date": "13 novembre 2025",
+      "matchs": [
+        {
+          "match": "France vs Ukraine",
+          "pronostic": "Victoire de la France et Total +1,5",
+          "confiance": "⭐⭐⭐⭐☆",
+          "resultat": "🕒 En attente"
+        },
+        {
+          "match": "Angleterre vs Serbie",
+          "pronostic": "12 à la mi-temps",
+          "confiance": "⭐⭐⭐☆☆",
+          "resultat": "🕒 En attente"
+        }
+      ]
+    },
     {
       "date": "12 novembre 2025",
       "matchs": [
@@ -34,5 +45,6 @@
     }
   ]
 }
+
 
   
