@@ -1,82 +1,22 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>VISION PRONO</title>
-
   <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
-    }
-    header {
-      background-color: #1a73e8;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-    main {
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-      background-color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      border-radius: 10px;
-    }
-    h2 {
-      color: #333;
-      border-bottom: 2px solid #1a73e8;
-      padding-bottom: 10px;
-    }
-    .pronostic {
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      transition: transform 0.2s ease;
-    }
-    .pronostic:hover {
-      transform: scale(1.02);
-    }
-    .resultat {
-      font-weight: bold;
-    }
-    .resultat.gagne {
-      color: green;
-    }
-    .resultat.perdu {
-      color: red;
-    }
-    .resultat.attente {
-      color: gray;
-    }
-    footer {
-      text-align: center;
-      background-color: #1a73e8;
-      color: white;
-      padding: 10px;
-      margin-top: 30px;
-    }
-    button {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-      padding: 8px 12px;
-      border-radius: 5px;
-      cursor: pointer;
-      margin-bottom: 15px;
-    }
-    button:hover {
-      background-color: #0f5ed7;
-    }
-    .separator {
-      margin: 30px 0;
-      border-top: 3px solid #1a73e8;
-    }
+    body{font-family:Arial,Helvetica,sans-serif;background:#f4f6f9;margin:0;padding:0}
+    header{background:#1a73e8;color:#fff;text-align:center;padding:20px}
+    main{padding:20px;max-width:800px;margin:20px auto;background:#fff;border-radius:8px;box-shadow:0 2px 6px rgba(0,0,0,0.08)}
+    h2{color:#333;border-bottom:2px solid #1a73e8;padding-bottom:8px}
+    .pronostic{background:#f9f9f9;border:1px solid #ddd;padding:12px;margin:10px 0;border-radius:8px}
+    .resultat{font-weight:700;margin-left:8px}
+    .resultat.gagne{color:green}
+    .resultat.perdu{color:red}
+    .resultat.attente{color:gray}
+    button{background:#1a73e8;color:#fff;border:none;padding:8px 12px;border-radius:6px;cursor:pointer;margin-bottom:15px}
+    .separator{margin:24px 0;border-top:3px solid #1a73e8}
+    footer{text-align:center;background:#1a73e8;color:#fff;padding:10px;margin-top:20px}
   </style>
 </head>
 <body>
@@ -86,8 +26,8 @@
   </header>
 
   <main>
-    <div class="date" id="date"></div>
-    <button onclick="chargerPronostics()">🔄 Actualiser les pronostics</button>
+    <div id="date" style="text-align:right;color:#666;margin-bottom:8px"></div>
+    <button id="refresh">🔄 Actualiser les pronostics</button>
 
     <h2>Pronostics du jour</h2>
     <div id="liste-pronos"></div>
@@ -103,60 +43,114 @@
   </footer>
 
   <script>
-    function chargerPronostics() {
-      fetch("pronostics.json?_=" + new Date().getTime()) // éviter le cache
-        .then(response => response.json())
-        .then(data => {
-          // Nettoyage avant affichage
-          document.getElementById("liste-pronos").innerHTML = "";
-          document.getElementById("historique").innerHTML = "";
+    const listePronos = document.getElementById('liste-pronos');
+    const historiqueEl = document.getElementById('historique');
+    const dateEl = document.getElementById('date');
+    const refreshBtn = document.getElementById('refresh');
 
-          // 🎯 Section du jour (en haut)
-          document.getElementById("date").textContent = `🗓️ ${data.aujourdhui.date}`;
-          data.aujourdhui.matchs.forEach(p => {
-            const div = document.createElement("div");
-            div.classList.add("pronostic");
-            div.innerHTML = `
-              <h3>${p.match}</h3>
-              <p><strong>Pronostic :</strong> ${p.pronostic}</p>
-              ${p.confiance ? `<p><strong>Confiance :</strong> ${p.confiance}</p>` : ""}
-            `;
-            document.getElementById("liste-pronos").appendChild(div);
-          });
-
-          // 📅 Historique (en bas, du plus ancien au plus récent)
-          const historiqueTrie = [...data.historique].sort(
-            (a, b) => new Date(a.date) - new Date(b.date)
-          );
-
-          historiqueTrie.forEach(jour => {
-            const jourDiv = document.createElement("div");
-            jourDiv.innerHTML = `<h4>${jour.date}</h4>`;
-            jour.matchs.forEach(p => {
-              const div = document.createElement("div");
-              div.classList.add("pronostic");
-              let resClass = "attente";
-              if (p.resultat.includes("Gagné")) resClass = "gagne";
-              else if (p.resultat.includes("Perdu")) resClass = "perdu";
-
-              div.innerHTML = `
-                <p><strong>${p.match}</strong> — ${p.pronostic}
-                ${p.confiance ? `(${p.confiance})` : ""}
-                <span class="resultat ${resClass}"> ${p.resultat}</span></p>
-              `;
-              jourDiv.appendChild(div);
-            });
-            document.getElementById("historique").appendChild(jourDiv);
-          });
-        })
-        .catch(err => {
-          console.error(err);
-          document.getElementById("liste-pronos").innerHTML =
-            "<p style='color:red;'>Erreur de chargement des pronostics.</p>";
-        });
+    // Format de la date FR
+    function todayString() {
+      return new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // Charger automatiquement au démarrage
+    function classForResult(resultText) {
+      if (!resultText) return 'attente';
+      if (resultText.toLowerCase().includes('gagn')) return 'gagne';
+      if (resultText.toLowerCase().includes('perd')) return 'perdu';
+      if (resultText.includes('✅')) return 'gagne';
+      if (resultText.includes('❌')) return 'perdu';
+      return 'attente';
+    }
+
+    function showPronosticsDuJour(day) {
+      dateEl.textContent = `🗓️ ${day.date || todayString()}`;
+      listePronos.innerHTML = '';
+      if (!day.matchs || day.matchs.length === 0) {
+        listePronos.innerHTML = '<p>Aucun pronostic pour ce jour.</p>';
+        return;
+      }
+      day.matchs.forEach(p => {
+        const div = document.createElement('div');
+        div.className = 'pronostic';
+        const res = p.resultat || '🕒 En attente';
+        const resClass = classForResult(res);
+        div.innerHTML = `
+          <h3>${p.match}</h3>
+          <p><strong>Pronostic :</strong> ${p.pronostic || ''}</p>
+          ${p.confiance ? `<p><strong>Confiance :</strong> ${p.confiance}</p>` : ''}
+          <p><strong>Résultat :</strong> <span class="resultat ${resClass}">${res}</span></p>
+        `;
+        listePronos.appendChild(div);
+      });
+    }
+
+    function showHistorique(histo, excludeDate) {
+      historiqueEl.innerHTML = '';
+      // trier du plus récent au plus ancien
+      const tri = [...histo].sort((a,b) => new Date(b.date) - new Date(a.date));
+      tri.forEach(jour => {
+        if (jour.date === excludeDate) return; // éviter duplication
+        const jDiv = document.createElement('div');
+        jDiv.innerHTML = `<h4>🗓️ ${jour.date}</h4>`;
+        jour.matchs.forEach(p => {
+          const div = document.createElement('div');
+          div.className = 'pronostic';
+          const res = p.resultat || '🕒 En attente';
+          const resClass = classForResult(res);
+          div.innerHTML = `
+            <p><strong>${p.match}</strong> — ${p.pronostic || ''} ${p.confiance ? `(${p.confiance})` : ''}
+            <span class="resultat ${resClass}"> ${res}</span></p>
+          `;
+          jDiv.appendChild(div);
+        });
+        historiqueEl.appendChild(jDiv);
+      });
+    }
+
+    async function chargerPronostics() {
+      try {
+        const resp = await fetch('pronostics.json?_=' + new Date().getTime());
+        const data = await resp.json();
+
+        listePronos.innerHTML = '';
+        historiqueEl.innerHTML = '';
+        dateEl.textContent = '';
+
+        const today = todayString();
+
+        let dayToShow = (data.aujourdhui && Array.isArray(data.aujourdhui.matchs) && data.aujourdhui.matchs.length > 0)
+          ? data.aujourdhui
+          : null;
+
+        if (!dayToShow && Array.isArray(data.historique)) {
+          const found = data.historique.find(j => j.date === today && Array.isArray(j.matchs) && j.matchs.length > 0);
+          if (found) dayToShow = found;
+        }
+
+        if (!dayToShow && Array.isArray(data.historique)) {
+          for (let i = data.historique.length - 1; i >= 0; i--) {
+            const j = data.historique[i];
+            if (Array.isArray(j.matchs) && j.matchs.length > 0) { dayToShow = j; break; }
+          }
+        }
+
+        if (!dayToShow) {
+          dateEl.textContent = `🗓️ ${today}`;
+          listePronos.innerHTML = '<p>Aucun pronostic disponible.</p>';
+          if (Array.isArray(data.historique)) showHistorique(data.historique, '');
+          return;
+        }
+
+        showPronosticsDuJour(dayToShow);
+        if (Array.isArray(data.historique)) showHistorique(data.historique, dayToShow.date || '');
+
+      } catch (err) {
+        console.error(err);
+        listePronos.innerHTML = '<p style="color:red;">⚠️ Erreur de chargement des pronostics.</p>';
+      }
+    }
+
+    refreshBtn.addEventListener('click', chargerPronostics);
     chargerPronostics();
   </script>
 </body>
