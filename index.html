@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>VISION PRONO</title>
-
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -12,29 +11,24 @@
       margin: 0;
       padding: 0;
     }
-
     header {
       background-color: #1a73e8;
       color: white;
       text-align: center;
       padding: 20px;
     }
-
     main {
       padding: 20px;
       max-width: 800px;
       margin: auto;
       background-color: white;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-      border-radius: 10px;
     }
-
     h2 {
       color: #333;
       border-bottom: 2px solid #1a73e8;
       padding-bottom: 10px;
     }
-
     .pronostic {
       background-color: #f9f9f9;
       border: 1px solid #ddd;
@@ -43,11 +37,21 @@
       border-radius: 8px;
       transition: transform 0.2s ease;
     }
-
     .pronostic:hover {
       transform: scale(1.02);
     }
-
+    .resultat {
+      font-weight: bold;
+    }
+    .resultat.gagne {
+      color: green;
+    }
+    .resultat.perdu {
+      color: red;
+    }
+    .resultat.attente {
+      color: gray;
+    }
     footer {
       text-align: center;
       background-color: #1a73e8;
@@ -55,39 +59,17 @@
       padding: 10px;
       margin-top: 30px;
     }
-
-    .date {
-      text-align: right;
-      color: #666;
-      font-size: 0.9em;
-    }
-
-    #refresh {
+    button {
       background-color: #1a73e8;
       color: white;
       border: none;
-      padding: 10px 20px;
-      border-radius: 6px;
+      padding: 8px 12px;
+      border-radius: 5px;
       cursor: pointer;
-      font-size: 16px;
-      transition: 0.3s;
       margin-bottom: 15px;
     }
-
-    #refresh:hover {
-      background-color: #155bb5;
-    }
-
-    #historique {
-      margin-top: 30px;
-    }
-
-    .historique-item {
-      background: #eef3fc;
-      border: 1px solid #cbd6ee;
-      border-radius: 8px;
-      padding: 10px;
-      margin-bottom: 10px;
+    button:hover {
+      background-color: #0f5ed7;
     }
   </style>
 </head>
@@ -99,15 +81,13 @@
 
   <main>
     <div class="date" id="date"></div>
-    <button id="refresh">🔄 Actualiser les pronostics</button>
+    <button onclick="chargerPronostics()">🔄 Actualiser les pronostics</button>
 
     <h2>Pronostics du jour</h2>
     <div id="liste-pronos"></div>
 
-    <div id="historique">
-      <h2>Historique</h2>
-      <div id="liste-historique"></div>
-    </div>
+    <h2>Historique</h2>
+    <div id="historique"></div>
   </main>
 
   <footer>
@@ -115,57 +95,56 @@
   </footer>
 
   <script>
-    const listePronos = document.getElementById("liste-pronos");
-    const dateEl = document.getElementById("date");
-    const listeHistorique = document.getElementById("liste-historique");
-
     function chargerPronostics() {
-      fetch("pronostics.json")
+      fetch("pronostics.json?_=" + new Date().getTime()) // évite le cache
         .then(response => response.json())
         .then(data => {
-          const historique = JSON.parse(localStorage.getItem("historique")) || [];
-          historique.push({ date: data.date, matchs: data.matchs });
-          localStorage.setItem("historique", JSON.stringify(historique.slice(-5)));
+          document.getElementById("liste-pronos").innerHTML = "";
+          document.getElementById("historique").innerHTML = "";
 
-          dateEl.textContent = `🗓️ ${data.date}`;
-          listePronos.innerHTML = "";
-          data.matchs.forEach(p => {
+          // Section du jour
+          document.getElementById("date").textContent = `🗓️ ${data.aujourdhui.date}`;
+          data.aujourdhui.matchs.forEach(p => {
             const div = document.createElement("div");
             div.classList.add("pronostic");
             div.innerHTML = `
               <h3>${p.match}</h3>
               <p><strong>Pronostic :</strong> ${p.pronostic}</p>
-              <p><strong>Confiance :</strong> ${p.confiance}</p>
+              ${p.confiance ? `<p><strong>Confiance :</strong> ${p.confiance}</p>` : ""}
             `;
-            listePronos.appendChild(div);
+            document.getElementById("liste-pronos").appendChild(div);
           });
-          afficherHistorique();
+
+          // Historique
+          data.historique.forEach(jour => {
+            const jourDiv = document.createElement("div");
+            jourDiv.innerHTML = `<h4>${jour.date}</h4>`;
+            jour.matchs.forEach(p => {
+              const div = document.createElement("div");
+              div.classList.add("pronostic");
+              let resClass = "attente";
+              if (p.resultat.includes("Gagné")) resClass = "gagne";
+              else if (p.resultat.includes("Perdu")) resClass = "perdu";
+
+              div.innerHTML = `
+                <p><strong>${p.match}</strong> — ${p.pronostic} 
+                ${p.confiance ? `(${p.confiance})` : ""}
+                <span class="resultat ${resClass}"> ${p.resultat}</span></p>
+              `;
+              jourDiv.appendChild(div);
+            });
+            document.getElementById("historique").appendChild(jourDiv);
+          });
         })
         .catch(err => {
-          listePronos.innerHTML = "<p style='color:red;'>⚠️ Erreur lors du chargement des pronostics.</p>";
           console.error(err);
+          document.getElementById("liste-pronos").innerHTML =
+            "<p style='color:red;'>Erreur de chargement des pronostics.</p>";
         });
     }
 
-    function afficherHistorique() {
-      const historique = JSON.parse(localStorage.getItem("historique")) || [];
-      listeHistorique.innerHTML = "";
-      historique.reverse().forEach(item => {
-        const bloc = document.createElement("div");
-        bloc.classList.add("historique-item");
-        bloc.innerHTML = `<strong>${item.date}</strong><ul>${item.matchs
-          .map(m => `<li>${m.match} — ${m.pronostic} (${m.confiance})</li>`)
-          .join("")}</ul>`;
-        listeHistorique.appendChild(bloc);
-      });
-    }
-
-    document.getElementById("refresh").addEventListener("click", () => {
-      chargerPronostics();
-    });
-
+    // Charger automatiquement au démarrage
     chargerPronostics();
   </script>
 </body>
 </html>
-
