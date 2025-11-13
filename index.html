@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VISION PRONO</title>
+  
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -60,9 +61,21 @@
       font-size: 0.9em;
     }
 
-    #historique h3 {
-      color: #1a73e8;
-      margin-top: 20px;
+    /* Bouton d’actualisation */
+    .refresh-btn {
+      background-color: #1a73e8;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 0.9em;
+      transition: background 0.3s;
+      margin-bottom: 15px;
+    }
+
+    .refresh-btn:hover {
+      background-color: #155ec7;
     }
   </style>
 </head>
@@ -74,6 +87,7 @@
 
   <main>
     <div class="date" id="date"></div>
+    <button class="refresh-btn" onclick="actualiser()">🔄 Actualiser les pronostics</button>
     <h2>Pronostics du jour</h2>
     <div id="liste-pronos"></div>
 
@@ -86,65 +100,55 @@
   </footer>
 
   <script>
-    fetch("pronostics.json")
-      .then(response => response.json())
-      .then(data => {
-        // Date du jour formatée comme dans le JSON
-        const today = new Date().toLocaleDateString("fr-FR", {
-          day: "numeric",
-          month: "long",
-          year: "numeric"
-        }).toLowerCase();
+    function chargerPronostics() {
+      fetch("pronostics.json?cache=" + new Date().getTime()) // empêche le cache
+        .then(response => response.json())
+        .then(data => {
+          const container = document.getElementById("liste-pronos");
+          const historiqueContainer = document.getElementById("historique");
+          container.innerHTML = "";
+          historiqueContainer.innerHTML = "";
 
-        const todayContainer = document.getElementById("liste-pronos");
-        const historiqueContainer = document.getElementById("historique");
+          // Afficher la date du jour
+          document.getElementById("date").textContent = `🗓️ ${data.date}`;
 
-        let pronoJour = null;
-
-        // Recherche du jour correspondant
-        data.jours.forEach(j => {
-          if (j.date.toLowerCase() === today) {
-            pronoJour = j;
-          }
-        });
-
-        if (pronoJour) {
-          document.getElementById("date").textContent = `🗓️ ${pronoJour.date}`;
-          pronoJour.matchs.forEach(p => {
+          // Afficher les pronostics du jour
+          data.jour.forEach(p => {
             const div = document.createElement("div");
             div.classList.add("pronostic");
             div.innerHTML = `
               <h3>${p.match}</h3>
               <p><strong>Pronostic :</strong> ${p.pronostic}</p>
-              <p><strong>Confiance :</strong> ${p.confiance || "—"}</p>
-              <p><strong>Résultat :</strong> ${p.resultat || "🕒 En attente"}</p>
+              <p><strong>Confiance :</strong> ${p.confiance}</p>
+              <p><strong>Résultat :</strong> ${p.resultat}</p>
             `;
-            todayContainer.appendChild(div);
+            container.appendChild(div);
           });
-        } else {
-          document.getElementById("date").textContent = "🗓️ Aucun pronostic pour aujourd'hui";
-          todayContainer.innerHTML = "<p style='color:gray;'>Aucun pronostic disponible pour cette date.</p>";
-        }
 
-        // Affichage historique (du plus récent au plus ancien)
-        data.jours
-          .filter(j => j.date.toLowerCase() !== today)
-          .forEach(jour => {
+          // Afficher l’historique (du plus récent au plus ancien)
+          data.historique.forEach(jour => {
             const section = document.createElement("div");
-            section.innerHTML = `<h3>${jour.date}</h3>`;
+            section.innerHTML = `<h4>${jour.date}</h4>`;
             jour.matchs.forEach(p => {
-              const pdiv = document.createElement("p");
-              pdiv.textContent = `${p.match} — ${p.pronostic} ${p.resultat || "🕒 En attente"}`;
-              section.appendChild(pdiv);
+              section.innerHTML += `
+                <p>${p.match} — ${p.pronostic} ${p.resultat}</p>
+              `;
             });
             historiqueContainer.appendChild(section);
           });
-      })
-      .catch(error => {
-        console.error("Erreur chargement JSON :", error);
-        document.getElementById("liste-pronos").innerHTML = "<p style='color:red;'>Erreur lors du chargement des données.</p>";
-      });
+        })
+        .catch(() => {
+          document.getElementById("liste-pronos").innerHTML =
+            "<p style='color:red;'>⚠️ Erreur de chargement des pronostics.</p>";
+        });
+    }
+
+    function actualiser() {
+      chargerPronostics();
+      alert("🔁 Pronostics mis à jour !");
+    }
+
+    chargerPronostics();
   </script>
 </body>
 </html>
-
