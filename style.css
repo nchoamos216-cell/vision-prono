@@ -48,3 +48,17 @@ footer {
     padding: 10px;
     margin-top: 40px;
 }
+.win {
+    color: #00a300;
+    font-weight: bold;
+}
+
+.lose {
+    color: #d10000;
+    font-weight: bold;
+}
+
+.wait {
+    color: #b38f00;
+    font-weight: bold;
+}

@@ -3,70 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VISION PRONO - Mes Pronostics</title>
-    <link rel="stylesheet" href="style.css">
+    <title>VISION PRONO</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background: #1a73e8;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+
+        main {
+            max-width: 900px;
+            margin: auto;
+            padding: 20px;
+        }
+
+        h2, h3 {
+            color: #1a73e8;
+        }
+
+        .card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .match {
+            margin-bottom: 12px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .win {
+            color: #00a300;
+            font-weight: bold;
+        }
+
+        .lose {
+            color: #d10000;
+            font-weight: bold;
+        }
+
+        .wait {
+            color: #b38f00;
+            font-weight: bold;
+        }
+
+        footer {
+            background: #1a73e8;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-top: 40px;
+        }
+
+        .stars {
+            color: gold;
+        }
+    </style>
 </head>
 
 <body>
 
-    <header>
-        <h1>⚽ Mes Pronostics du Jour</h1>
-        <p>Les meilleurs conseils gratuits pour parier intelligemment !</p>
-    </header>
+<header>
+    <h1>⚽ VISION PRONO</h1>
+    <p>Les meilleurs conseils gratuits pour parier intelligemment</p>
+</header>
+
+<main>
 
     <section id="today"></section>
 
-    <h2 class="titre-historique">Historique</h2>
+    <h2>Historique</h2>
     <section id="historique"></section>
 
-    <footer>
-        © 2025 - VISION PRONO | Développé par AMOS N'CHO
-    </footer>
+</main>
 
-    <script>
-        fetch("pronostics.json")
-            .then(res => res.json())
-            .then(data => {
+<footer>
+    © 2025 - VISION PRONO | Développé par AMOS N'CHO
+</footer>
 
-                const stars = "⭐⭐⭐⭐⭐";
+<script>
+    fetch("pronostics.json")
+        .then(res => res.json())
+        .then(data => {
 
-                // --- PRONOSTICS DU JOUR ---
-                let todaySection = document.getElementById("today");
-                let today = data.pronostics[data.pronostics.length - 1];
+            const stars = "⭐⭐⭐⭐⭐";
 
-                todaySection.innerHTML = `
+            function getStatusIcon(result) {
+                if (result.toLowerCase() === "gagné") {
+                    return `<span class="win">✓ Gagné</span>`;
+                }
+                if (result.toLowerCase() === "perdu") {
+                    return `<span class="lose">✗ Perdu</span>`;
+                }
+                return `<span class="wait">🕒 En attente</span>`;
+            }
+
+            // PRONOSTICS DU JOUR (dernier element)
+            let todaySection = document.getElementById("today");
+            let today = data.pronostics[data.pronostics.length - 1];
+
+            todaySection.innerHTML = `
+                <div class="card">
+                    <h2>Pronostics du ${today.date}</h2>
+
+                    <div class="match">
+                        <p><strong>Match :</strong> ${today.match1}</p>
+                        <p><strong>Pronostic :</strong> ${today.prono1} <span class="stars">${stars}</span></p>
+                        <p><strong>Résultat :</strong> ${getStatusIcon(today.result1)}</p>
+                    </div>
+
+                    <div class="match">
+                        <p><strong>Match :</strong> ${today.match2}</p>
+                        <p><strong>Pronostic :</strong> ${today.prono2} <span class="stars">${stars}</span></p>
+                        <p><strong>Résultat :</strong> ${getStatusIcon(today.result2)}</p>
+                    </div>
+                </div>
+            `;
+
+            // HISTORIQUE (tout sauf le dernier)
+            let histoSection = document.getElementById("historique");
+
+            data.pronostics.slice(0, -1).reverse().forEach(day => {
+                histoSection.innerHTML += `
                     <div class="card">
-                        <h2>🗓️ ${today.date}</h2>
+                        <h3>${day.date}</h3>
 
-                        <div class="match">
-                            <p><strong>Match :</strong> ${today.match1}</p>
-                            <p><strong>Pronostic :</strong> ${today.prono1} <span class="stars">${stars}</span></p>
-                            <p><strong>Résultat :</strong> ${today.result1} <span class="stars">${stars}</span></p>
-                        </div>
+                        <p><strong>${day.match1}</strong> — 
+                        ${day.prono1} :
+                        ${getStatusIcon(day.result1)}</p>
 
-                        <div class="match">
-                            <p><strong>Match :</strong> ${today.match2}</p>
-                            <p><strong>Pronostic :</strong> ${today.prono2} <span class="stars">${stars}</span></p>
-                            <p><strong>Résultat :</strong> ${today.result2} <span class="stars">${stars}</span></p>
-                        </div>
+                        <p><strong>${day.match2}</strong> — 
+                        ${day.prono2} :
+                        ${getStatusIcon(day.result2)}</p>
                     </div>
                 `;
-
-                // --- HISTORIQUE (tous sauf le dernier jour) ---
-                let histoSection = document.getElementById("historique");
-
-                data.pronostics.slice(0, -1).reverse().forEach(day => {
-                    histoSection.innerHTML += `
-                        <div class="card historique-card">
-                            <h3>${day.date}</h3>
-
-                            <p><strong>${day.match1}</strong> — ${day.prono1} : ${day.result1} <span class="stars">${stars}</span></p>
-                            <p><strong>${day.match2}</strong> — ${day.prono2} : ${day.result2} <span class="stars">${stars}</span></p>
-                        </div>
-                    `;
-                });
             });
-    </script>
+        });
+</script>
 
 </body>
 </html>
