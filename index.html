@@ -1,154 +1,72 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>VISION PRONO</title>
-  
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 0;
-    }
-
-    header {
-      background-color: #1a73e8;
-      color: white;
-      text-align: center;
-      padding: 20px;
-    }
-
-    main {
-      padding: 20px;
-      max-width: 800px;
-      margin: auto;
-      background-color: white;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    }
-
-    h2 {
-      color: #333;
-      border-bottom: 2px solid #1a73e8;
-      padding-bottom: 10px;
-    }
-
-    .pronostic {
-      background-color: #f9f9f9;
-      border: 1px solid #ddd;
-      padding: 15px;
-      margin-bottom: 15px;
-      border-radius: 8px;
-      transition: transform 0.2s ease;
-    }
-
-    .pronostic:hover {
-      transform: scale(1.02);
-    }
-
-    footer {
-      text-align: center;
-      background-color: #1a73e8;
-      color: white;
-      padding: 10px;
-      margin-top: 30px;
-    }
-
-    .date {
-      text-align: right;
-      color: #666;
-      font-size: 0.9em;
-    }
-
-    /* Bouton d’actualisation */
-    .refresh-btn {
-      background-color: #1a73e8;
-      color: white;
-      border: none;
-      padding: 10px 15px;
-      border-radius: 6px;
-      cursor: pointer;
-      font-size: 0.9em;
-      transition: background 0.3s;
-      margin-bottom: 15px;
-    }
-
-    .refresh-btn:hover {
-      background-color: #155ec7;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VISION PRONO - Mes Pronostics</title>
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-  <header>
-    <h1>⚽ Mes Pronostics du Jour</h1>
-    <p>Les meilleurs conseils gratuits pour parier intelligemment !</p>
-  </header>
 
-  <main>
-    <div class="date" id="date"></div>
-    <button class="refresh-btn" onclick="actualiser()">🔄 Actualiser les pronostics</button>
-    <h2>Pronostics du jour</h2>
-    <div id="liste-pronos"></div>
+    <header>
+        <h1>⚽ Mes Pronostics du Jour</h1>
+        <p>Les meilleurs conseils gratuits pour parier intelligemment !</p>
+    </header>
 
-    <h2>Historique</h2>
-    <div id="historique"></div>
-  </main>
+    <section id="today"></section>
 
-  <footer>
-    <p>&copy; 2025 - VISION PRONO | Développé par AMOS N'CHO</p>
-  </footer>
+    <h2 class="titre-historique">Historique</h2>
+    <section id="historique"></section>
 
-  <script>
-    function chargerPronostics() {
-      fetch("pronostics.json?cache=" + new Date().getTime()) // empêche le cache
-        .then(response => response.json())
-        .then(data => {
-          const container = document.getElementById("liste-pronos");
-          const historiqueContainer = document.getElementById("historique");
-          container.innerHTML = "";
-          historiqueContainer.innerHTML = "";
+    <footer>
+        © 2025 - VISION PRONO | Développé par AMOS N'CHO
+    </footer>
 
-          // Afficher la date du jour
-          document.getElementById("date").textContent = `🗓️ ${data.date}`;
+    <script>
+        fetch("pronostics.json")
+            .then(res => res.json())
+            .then(data => {
 
-          // Afficher les pronostics du jour
-          data.jour.forEach(p => {
-            const div = document.createElement("div");
-            div.classList.add("pronostic");
-            div.innerHTML = `
-              <h3>${p.match}</h3>
-              <p><strong>Pronostic :</strong> ${p.pronostic}</p>
-              <p><strong>Confiance :</strong> ${p.confiance}</p>
-              <p><strong>Résultat :</strong> ${p.resultat}</p>
-            `;
-            container.appendChild(div);
-          });
+                const stars = "⭐⭐⭐⭐⭐";
 
-          // Afficher l’historique (du plus récent au plus ancien)
-          data.historique.forEach(jour => {
-            const section = document.createElement("div");
-            section.innerHTML = `<h4>${jour.date}</h4>`;
-            jour.matchs.forEach(p => {
-              section.innerHTML += `
-                <p>${p.match} — ${p.pronostic} ${p.resultat}</p>
-              `;
+                // --- PRONOSTICS DU JOUR ---
+                let todaySection = document.getElementById("today");
+                let today = data.pronostics[data.pronostics.length - 1];
+
+                todaySection.innerHTML = `
+                    <div class="card">
+                        <h2>🗓️ ${today.date}</h2>
+
+                        <div class="match">
+                            <p><strong>Match :</strong> ${today.match1}</p>
+                            <p><strong>Pronostic :</strong> ${today.prono1} <span class="stars">${stars}</span></p>
+                            <p><strong>Résultat :</strong> ${today.result1} <span class="stars">${stars}</span></p>
+                        </div>
+
+                        <div class="match">
+                            <p><strong>Match :</strong> ${today.match2}</p>
+                            <p><strong>Pronostic :</strong> ${today.prono2} <span class="stars">${stars}</span></p>
+                            <p><strong>Résultat :</strong> ${today.result2} <span class="stars">${stars}</span></p>
+                        </div>
+                    </div>
+                `;
+
+                // --- HISTORIQUE (tous sauf le dernier jour) ---
+                let histoSection = document.getElementById("historique");
+
+                data.pronostics.slice(0, -1).reverse().forEach(day => {
+                    histoSection.innerHTML += `
+                        <div class="card historique-card">
+                            <h3>${day.date}</h3>
+
+                            <p><strong>${day.match1}</strong> — ${day.prono1} : ${day.result1} <span class="stars">${stars}</span></p>
+                            <p><strong>${day.match2}</strong> — ${day.prono2} : ${day.result2} <span class="stars">${stars}</span></p>
+                        </div>
+                    `;
+                });
             });
-            historiqueContainer.appendChild(section);
-          });
-        })
-        .catch(() => {
-          document.getElementById("liste-pronos").innerHTML =
-            "<p style='color:red;'>⚠️ Erreur de chargement des pronostics.</p>";
-        });
-    }
+    </script>
 
-    function actualiser() {
-      chargerPronostics();
-      alert("🔁 Pronostics mis à jour !");
-    }
-
-    chargerPronostics();
-  </script>
 </body>
 </html>
