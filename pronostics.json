@@ -1,94 +1,174 @@
 {
-  "pronostics": [
+  "jours": [
     {
       "date": "12 novembre 2025",
-      "match1": "Atlético Mineiro vs Fortaleza",
-      "prono1": "Victoire ou nul Atlético Mineiro",
-      "result1": "Gagné",
-      "match2": "La Equidad vs Deportivo Pereira",
-      "prono2": "Victoire ou nul La Equidad",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Atlético Mineiro vs Fortaleza",
+          "pronostic": "Atlético Mineiro victoire ou nul",
+          "confiance": "⭐⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "La Equidad vs Deportivo Pereira",
+          "pronostic": "La Equidad victoire ou nul",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "13 novembre 2025",
-      "match1": "France vs Ukraine",
-      "prono1": "Victoire de la France + plus de 1,5 buts",
-      "result1": "Gagné",
-      "match2": "Angleterre vs Serbie",
-      "prono2": "12 à la mi-temps",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "France vs Ukraine",
+          "pronostic": "Victoire de la France et Total +1,5",
+          "confiance": "⭐⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Angleterre vs Serbie",
+          "pronostic": "12 à la mi-temps",
+          "confiance": "⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "14 novembre 2025",
-      "match1": "Finlande vs Malte",
-      "prono1": "Victoire de la Finlande",
-      "result1": "Perdu",
-      "match2": "Pologne vs Pays-Bas",
-      "prono2": "12 à la mi-temps",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Finlande vs Malte",
+          "pronostic": "Victoire de la Finlande",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "perdu"
+        },
+        {
+          "match": "Pologne vs Pays-Bas",
+          "pronostic": "12 à la mi-temps",
+          "confiance": "⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "15 novembre 2025",
-      "match1": "Turquie vs Bulgarie",
-      "prono1": "Victoire de la Turquie",
-      "result1": "Perdu",
-      "match2": "Espagne vs Géorgie",
-      "prono2": "12 à la mi-temps",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Turquie vs Bulgarie",
+          "pronostic": "Victoire de la Turquie",
+          "confiance": "⭐⭐⭐",
+          "resultat": "perdu"
+        },
+        {
+          "match": "Espagne vs Géorgie",
+          "pronostic": "12 à la mi-temps",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "16 novembre 2025",
-      "match1": "Portugal vs Arménie",
-      "prono1": "Victoire du Portugal",
-      "result1": "Gagné",
-      "match2": "Azerbaïdjan vs France",
-      "prono2": "Victoire de la France",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Portugal vs Arménie",
+          "pronostic": "Victoire du Portugal",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Azerbaïdjan vs France",
+          "pronostic": "Victoire de la France",
+          "confiance": "⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "17 novembre 2025",
-      "match1": "Irlande du Nord vs Luxembourg",
-      "prono1": "Victoire Irlande du Nord",
-      "result1": "Gagné",
-      "match2": "Allemagne vs Slovaquie",
-      "prono2": "Victoire Allemagne",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Irlande du Nord vs Luxembourg",
+          "pronostic": "Victoire Irlande du Nord",
+          "confiance": "⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Allemagne vs Slovaquie",
+          "pronostic": "Victoire Allemagne",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "18 novembre 2025",
-      "match1": "Kosovo vs Suisse",
-      "prono1": "Double chance 2X Suisse",
-      "result1": "Gagné",
-      "match2": "Espagne vs Turquie",
-      "prono2": "Double chance 1X Espagne",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Kosovo vs Suisse",
+          "pronostic": "Double chance 2X Suisse",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Espagne vs Turquie",
+          "pronostic": "Double chance 1X Espagne",
+          "confiance": "⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "19 novembre 2025",
-      "match1": "Palmeiras vs Vitoria",
-      "prono1": "Double chance 1X Palmeiras",
-      "result1": "Gagné",
-      "match2": "Belgrano vs Ferro",
-      "prono2": "Double chance 1X Belgrano",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Palmeiras vs Vitoria",
+          "pronostic": "Double chance 1X Palmeiras",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Belgrano vs Ferro",
+          "pronostic": "Double chance 1X Belgrano",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "20 novembre 2025",
-      "match1": "Santos vs Mirassol",
-      "prono1": "Double chance 1X Santos",
-      "result1": "Gagné",
-      "match2": "Juventude vs Cruzeiro",
-      "prono2": "Double chance Cruzeiro",
-      "result2": "Gagné"
+      "matchs": [
+        {
+          "match": "Santos vs Mirassol",
+          "pronostic": "Double chance 1X Santos",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        },
+        {
+          "match": "Juventude vs Cruzeiro",
+          "pronostic": "Double chance Cruzeiro",
+          "confiance": "⭐⭐⭐⭐",
+          "resultat": "gagné"
+        }
+      ]
     },
     {
       "date": "21 novembre 2025",
-      "match1": "KFUM-Kameratene vs Bodo-Glimt",
-      "prono1": "12 à la mi-temps",
-      "result1": "En attente",
-      "match2": "FSV Mayence vs TSG Hoffenheim",
-      "prono2": "Double chance 12",
-      "result2": "En attente"
+      "matchs": [
+        {
+          "match": "KFUM-Kameratene vs Bodo-Glimt",
+          "pronostic": "12 à la mi-temps",
+          "confiance": "⭐⭐⭐",
+          "resultat": "en attente"
+        },
+        {
+          "match": "FSV Mayence 05 vs TSG Hoffenheim",
+          "pronostic": "Double chance 12",
+          "confiance": "⭐⭐⭐",
+          "resultat": "en attente"
+        }
+      ]
     }
   ]
 }

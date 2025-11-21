@@ -1,64 +1,101 @@
-body {
-    font-family: Arial, sans-serif;
-    background: #f5f5f5;
-    margin: 0;
-    padding: 0;
+/* === Style général === */
+:root{
+  --bg:#f4f6f9;
+  --card:#ffffff;
+  --accent:#1a73e8;
+  --text:#222;
+  --green:#00a300;
+  --red:#d10000;
+  --gold:#c58b00;
 }
 
-header {
-    background: #1d3557;
-    color: white;
-    text-align: center;
-    padding: 20px;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter, Arial, sans-serif;
+  background:var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
 }
 
-h1 {
-    margin: 0;
+header{
+  background:var(--accent);
+  color:#fff;
+  padding:18px 12px;
+  text-align:center;
+}
+header h1{margin:0;font-size:22px;letter-spacing:1px}
+header p{margin:6px 0 0;font-size:14px;opacity:0.95}
+
+/* container */
+.container{
+  max-width:920px;
+  margin:22px auto;
+  padding:0 14px;
 }
 
-.card {
-    background: white;
-    width: 90%;
-    margin: 20px auto;
-    padding: 15px;
-    border-radius: 10px;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+/* controls */
+.top-controls{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.date-jour{font-weight:600;color:#555}
+.btn{
+  background:var(--accent);
+  color:#fff;
+  border:none;
+  padding:8px 12px;
+  border-radius:8px;
+  cursor:pointer;
+  box-shadow:0 2px 6px rgba(0,0,0,0.1);
+}
+.btn:hover{opacity:0.95}
+
+/* blocks */
+.block{
+  background:transparent;
+  margin-bottom:18px;
+}
+.block h2{
+  margin:0 0 12px 0;
+  color:var(--accent);
+  font-size:18px;
 }
 
-.match {
-    margin-top: 10px;
-    padding: 10px;
-    border-left: 4px solid #1d3557;
-    background: #f8f9fa;
+/* card de match */
+.match-card{
+  background:var(--card);
+  border-radius:10px;
+  padding:12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+  margin-bottom:10px;
+  box-shadow:0 5px 18px rgba(25,39,60,0.04);
 }
+.match-card.small{padding:10px;font-size:14px}
+.match-left{flex:1}
+.match-title{font-weight:700}
+.match-prono{font-size:14px; color:#444; margin-top:6px}
+.match-right{text-align:right; min-width:120px}
 
-.stars {
-    color: gold;
-}
+/* status (icone + label) */
+.status{display:inline-flex; align-items:center; gap:8px; font-weight:700}
+.status span{display:inline-block}
+.status.status-gagne{color:var(--green)}
+.status.status-perdu{color:var(--red)}
+.status.status-attente{color:var(--gold)}
 
-.titre-historique {
-    text-align: center;
-    margin-top: 40px;
-}
+/* étoiles */
+.stars{color:gold; margin-left:8px}
 
-footer {
-    text-align: center;
-    background: #1d3557;
-    color: white;
-    padding: 10px;
-    margin-top: 40px;
-}
-.win {
-    color: #00a300;
-    font-weight: bold;
-}
+/* historique jour block */
+.jour-block{margin-top:12px}
+.jour-date{margin:8px 0 6px 0}
 
-.lose {
-    color: #d10000;
-    font-weight: bold;
-}
+/* footer */
+footer{margin-top:26px;padding:14px;text-align:center;color:#666;background:transparent}
 
-.wait {
-    color: #b38f00;
-    font-weight: bold;
-}
