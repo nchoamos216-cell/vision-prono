@@ -3,155 +3,197 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VISION PRONO</title>
+    <title>Vision Prono – Pronostics</title>
 
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f6f9;
+            background: #f2f2f2;
             margin: 0;
             padding: 0;
         }
 
         header {
-            background: #1a73e8;
+            background: black;
             color: white;
+            padding: 15px;
             text-align: center;
-            padding: 20px;
+            font-size: 22px;
         }
 
-        main {
-            max-width: 900px;
+        .container {
+            width: 90%;
+            max-width: 700px;
             margin: auto;
-            padding: 20px;
+            margin-top: 20px;
+            margin-bottom: 40px;
         }
 
-        h2, h3 {
-            color: #1a73e8;
-        }
-
-        .card {
+        .day-block {
             background: white;
             padding: 15px;
-            border-radius: 8px;
             margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            border-radius: 10px;
+            box-shadow: 0px 0px 8px rgba(0,0,0,0.1);
+        }
+
+        .day-title {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
         .match {
-            margin-bottom: 12px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid #ddd;
+            display: flex;
+            justify-content: space-between;
+            margin: 8px 0;
+            font-size: 16px;
         }
 
-        .win {
-            color: #00a300;
-            font-weight: bold;
-        }
-
-        .lose {
-            color: #d10000;
-            font-weight: bold;
-        }
-
-        .wait {
-            color: #b38f00;
-            font-weight: bold;
-        }
-
-        footer {
-            background: #1a73e8;
-            color: white;
-            text-align: center;
-            padding: 10px;
-            margin-top: 40px;
-        }
-
-        .stars {
-            color: gold;
+        .status-icon {
+            width: 22px;
+            height: 22px;
         }
     </style>
 </head>
 
 <body>
 
-<header>
-    <h1>⚽ VISION PRONO</h1>
-    <p>Les meilleurs conseils gratuits pour parier intelligemment</p>
-</header>
+<header>🔥 Vision Prono – Résultats & Pronostics 🔥</header>
 
-<main>
+<div class="container">
 
-    <section id="today"></section>
+    <!-- ===================== JOUR 14 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 14</div>
 
-    <h2>Historique</h2>
-    <section id="historique"></section>
+        <div class="match">
+            <span>Finlande vs Malte — Victoire Finlande</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Red_X.svg/240px-Red_X.svg.png" class="status-icon">
+        </div>
 
-</main>
+        <div class="match">
+            <span>Pologne vs Pays-Bas — 12 MT</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
 
-<footer>
-    © 2025 - VISION PRONO | Développé par AMOS N'CHO
-</footer>
 
-<script>
-    fetch("pronostics.json")
-        .then(res => res.json())
-        .then(data => {
+    <!-- ===================== JOUR 15 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 15</div>
 
-            const stars = "⭐⭐⭐⭐⭐";
+        <div class="match">
+            <span>Turquie vs Bulgarie — Victoire Turquie</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Red_X.svg/240px-Red_X.svg.png" class="status-icon">
+        </div>
 
-            function getStatusIcon(result) {
-                if (result.toLowerCase() === "gagné") {
-                    return `<span class="win">✓ Gagné</span>`;
-                }
-                if (result.toLowerCase() === "perdu") {
-                    return `<span class="lose">✗ Perdu</span>`;
-                }
-                return `<span class="wait">🕒 En attente</span>`;
-            }
+        <div class="match">
+            <span>Espagne vs Géorgie — 12 MT</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
 
-            // PRONOSTICS DU JOUR (dernier element)
-            let todaySection = document.getElementById("today");
-            let today = data.pronostics[data.pronostics.length - 1];
 
-            todaySection.innerHTML = `
-                <div class="card">
-                    <h2>Pronostics du ${today.date}</h2>
+    <!-- ===================== JOUR 16 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 16</div>
 
-                    <div class="match">
-                        <p><strong>Match :</strong> ${today.match1}</p>
-                        <p><strong>Pronostic :</strong> ${today.prono1} <span class="stars">${stars}</span></p>
-                        <p><strong>Résultat :</strong> ${getStatusIcon(today.result1)}</p>
-                    </div>
+        <div class="match">
+            <span>Portugal vs Arménie — Victoire Portugal</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
 
-                    <div class="match">
-                        <p><strong>Match :</strong> ${today.match2}</p>
-                        <p><strong>Pronostic :</strong> ${today.prono2} <span class="stars">${stars}</span></p>
-                        <p><strong>Résultat :</strong> ${getStatusIcon(today.result2)}</p>
-                    </div>
-                </div>
-            `;
+        <div class="match">
+            <span>Azerbaïdjan vs France — Victoire France</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
 
-            // HISTORIQUE (tout sauf le dernier)
-            let histoSection = document.getElementById("historique");
 
-            data.pronostics.slice(0, -1).reverse().forEach(day => {
-                histoSection.innerHTML += `
-                    <div class="card">
-                        <h3>${day.date}</h3>
+    <!-- ===================== JOUR 17 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 17</div>
 
-                        <p><strong>${day.match1}</strong> — 
-                        ${day.prono1} :
-                        ${getStatusIcon(day.result1)}</p>
+        <div class="match">
+            <span>Irlande du Nord vs Luxembourg — Victoire Irlande du Nord</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
 
-                        <p><strong>${day.match2}</strong> — 
-                        ${day.prono2} :
-                        ${getStatusIcon(day.result2)}</p>
-                    </div>
-                `;
-            });
-        });
-</script>
+        <div class="match">
+            <span>Allemagne vs Slovaquie — Victoire Allemagne</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
+
+
+    <!-- ===================== JOUR 18 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 18</div>
+
+        <div class="match">
+            <span>Kosovo vs Suisse — Double chance 2X Suisse</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+
+        <div class="match">
+            <span>Espagne vs Turquie — Double chance 1X Espagne</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
+
+
+    <!-- ===================== JOUR 19 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 19</div>
+
+        <div class="match">
+            <span>Palmeiras vs Vitoria — Double chance 1X</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+
+        <div class="match">
+            <span>Belgrano vs Ferro — Double chance 1X</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
+
+
+    <!-- ===================== JOUR 20 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 20</div>
+
+        <div class="match">
+            <span>Santos vs Mirassol — Double chance 1X</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+
+        <div class="match">
+            <span>Juventude vs Cruzeiro — Double chance Cruzeiro</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/5f/Green_check.svg/240px-Green_check.svg.png" class="status-icon">
+        </div>
+    </div>
+
+
+    <!-- ===================== JOUR 21 ===================== -->
+    <div class="day-block">
+        <div class="day-title">⭐ Pronostics du 21</div>
+
+        <div class="match">
+            <span>KFUM vs Bodo-Glimt — 12 MT</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Clock_simple_white.svg/240px-Clock_simple_white.svg.png" class="status-icon">
+        </div>
+
+        <div class="match">
+            <span>FSV Mayence vs Hoffenheim — Double chance 12</span>
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8d/Clock_simple_white.svg/240px-Clock_simple_white.svg.png" class="status-icon">
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>
